@@ -1,0 +1,42 @@
+{% extends "learning_logs/base.html" %}
+
+{% block header %}
+  <h3 class="display-4">Share content</h3>
+{% endblock %}
+
+{% block content %}
+  {% if sent %}
+    <div class="alert alert-success mt-4">
+      <h7 class="alert-heading">E-mail successfully sent</h7>
+      <p>
+        "{{ topic.text }}" was successfully sent to {{ form.cleaned_data.to }}.
+      </p>
+    </div>
+  {% else %}
+    <div class="card my-4">
+      <div class="card-body">
+        <h4 class="card-title">Share "{{ topic.text }}" by E-mail</h4>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="form-group">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+          </div>
+          <div class="form-group">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+          </div>
+          <div class="form-group">
+            {{ form.to.label_tag }}
+            {{ form.to }}
+          </div>
+          <div class="form-group">
+            {{ form.comments.label_tag }}
+            {{ form.comments }}
+          </div>
+          <button type="submit" class="btn btn-primary">Send E-mail</button>
+        </form>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

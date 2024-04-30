@@ -1,0 +1,62 @@
+{% extends "learning_logs/base.html" %}
+
+{% block header %}
+  <h1>Topics</h1>
+  {% if tag %}
+    <h3>Posts tagged with "{{ tag.name }}"</h3>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <p><a href="{% url 'learning_logs:new_topic' %}" class="btn btn-primary">Add discuss</a></p>
+  <div class="row">
+    {% for topic in topics %}
+      <div class="col-md-12 mb-3">
+        <div class="topic-item">
+          <h5>
+            <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+          </h5>
+          <p class="tags">
+            Tags:
+            {% for tag in topic.tags.all %}
+              <a href="{% url 'learning_logs:topic_list_by_tag' tag.slug %}">
+                <span class="badge badge-secondary">{{ tag.name }}</span>
+              </a>
+              {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+             <strong>
+                <div class="topic-info">
+                  <div>
+                    <span class="count">
+                      <span class="total">{{ topic.total_likes }}</span>
+                      {% if total_likes == 1 %}
+                        <i class="fas fa-thumbs-up"></i> like
+                      {% else %}
+                        <i class="fas fa-thumbs-up"></i> likes
+                      {% endif %}
+                    </span>
+                  </div>
+                </div>
+              </strong>
+          </p>
+          <div class="btn-group">
+            <a href="{% url 'learning_logs:edit_topic' topic.id %}" class="btn btn-secondary btn-sm" role="button">Edit</a>
+            <a href="{% url 'learning_logs:confirm_delete_topic' topic_id=topic.id %}" class="btn btn-danger btn-sm" role="button">Delete</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="col-md-12">Add some more.</p>
+    {% endfor %}
+    {% include 'learning_logs/pagination.html' with page=topics %}
+  </div>
+  <style>
+    .topic-item {
+      background: #f8f9fa;
+      padding: 10px;
+      border: 1px solid #d1d1d1;
+      border-radius: 10px;
+      box-shadow: 3px 3px 6px 0 rgba(0, 0, 0, 0.1);
+    }
+  </style>
+{% endblock content %}

@@ -1,0 +1,76 @@
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+
+  <p><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a></p>
+  <div class="col-md-6 offset-md-3">
+    <div class="card mt-5 p-4">
+      <p>Edit:</p>
+
+      <form action="{% url 'learning_logs:edit_topic' topic.id %}" method='post'>
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="{{ form.text.id_for_label }}">Title:</label>
+          {{ form.text }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.tags.id_for_label }}">Tags:</label>
+          {{ form.tags }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.body.id_for_label }}">Text:</label>
+          {{ form.body }}
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-3d">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    .btn-3d {
+      background-color: #4c8efc;
+      border: 1px solid #2e64e8;
+      border-radius: 5px;
+      padding: 10px 20px;
+      color: #fff;
+      font-weight: bold;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-3d:hover {
+      background-color: #3b7ae4;
+      border-color: #1e4adb;
+    }
+
+    .btn-3d:active {
+      background-color: #3867d6;
+      border-color: #0b2f7b;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: -45px;
+      width: 150%;
+    }
+
+    .form-group textarea {
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
+
+{% endblock content %}

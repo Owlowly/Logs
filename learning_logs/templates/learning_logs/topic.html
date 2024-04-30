@@ -1,0 +1,162 @@
+{% extends 'learning_logs/base.html' %}
+
+{% block header %}
+  <h15>{{ topic }}</h15>
+{% endblock %}
+
+{% block content %}
+  <h5>{{ topic }}</h5>
+  <p class="tags">
+    Tags:
+    {% for tag in topic.tags.all %}
+      <a href="{% url 'learning_logs:topic_list_by_tag' tag.slug %}">
+        {{ tag.name }}
+      </a>
+    {% endfor %}
+  </p>
+{{ topic.body|linebreaks|urlize|safe }}
+  <p>
+  <strong>by:
+    <a href="{% url 'account:view_profile' topic.owner.username %}" class="text-primary">{{ topic.owner.username }}</a>
+    <strong>
+     {% with total_likes=topic.users_like.count users_like=topic.users_like.all %}
+       <div class="topic-info">
+        <div>
+            <span class="count">
+                {{ topic.total_views }} view{{ topic.total_views|pluralize }}
+            </span>
+            <span class="count">
+                <span class="total">{{ total_likes }}</span>
+                {% if topic.total_likes.count == 1 %}
+                    <i class="fas fa-thumbs-up"></i> like
+                {% else %}
+                    <i class="fas fa-thumbs-up"></i> likes
+                {% endif %}
+            </span>
+            <a href="#" data-id="{{ topic.id }}" data-action="{% if request.user not in topic.users_like.all %}like{% else %}unlike{% endif %}" class="like button">
+                {% if request.user not in users_like %}
+                    <i class="far fa-thumbs-up"></i> like
+                {% else %}
+                    <i class="fas fa-thumbs-down"></i> unlike
+                {% endif %}
+            </a>
+        </div>
+       </div>
+    </strong>
+
+</p>
+
+  <p>
+    {% if topic.owner == user %}
+      <a href="{% url 'learning_logs:edit_topic' topic.id %}" class="btn btn-info btn-sm rounded">Edit</a>
+    {% endif %}
+
+    <a href="{% url 'learning_logs:share_post' topic.id %}" class="btn btn-primary btn-sm rounded">Share this post</a>
+    <a href="{% url 'learning_logs:new_entry' topic.id %}" class="btn btn-success btn-sm rounded">Add comment</a>
+  </p>
+
+<h5>Similar posts:</h5>
+  {% for similar_topic in similar_topics %}
+    <p>
+      <a href="{{ similar_topic.get_absolute_url }}">{{ similar_topic.text }}</a>
+    </p>
+  {% empty %}
+    There are no similar discuss
+  {% endfor %}
+{% endwith %}
+<h4>Comments:</h4>
+<h5>Total Comments: {{ topic.entries.count }}</h5>
+  {% for entry in entries %}
+    <div class="entry-card-body">
+      {{ entry.text|linebreaks }}
+      <small>
+        {% if entry.user == user %}
+          <a href="{% url 'learning_logs:edit_entry' entry.id %}" class="btn btn-info btn-sm rounded">Edit</a>
+          <a href="{% url 'learning_logs:confirm_delete_entry' entry_id=entry.id %}" class="btn btn-danger btn-sm rounded">Delete</a>
+        {% endif %}
+      </small>
+      <p class="text-muted" style="font-size: 10px; padding: 0; margin: 0;">
+        <a href="{% url 'account:view_profile' entry.user.username %}" class="text-primary">By:{{ entry.user.username }}</a>
+      </p>
+      <p class="text-muted" style="font-size: 10px; padding: 0; margin: 0;">{{ entry.date_added|date:'M d, Y H:i' }}</p>
+    </div>
+  {% empty %}
+    There are no comments for this discuss yet.
+  {% endfor %}
+
+<style>
+    .entry-card {
+      border: none;
+    }
+
+    .entry-card-body {
+      background: #f8f9fa;
+      padding: 10px;
+      border: 1px solid #d1d1d1;
+      border-radius: 10px;
+      box-shadow: 3px 3px 6px 0 rgba(0, 0, 0, 0.1);
+    }
+    .like {
+      background-color: #0078d4;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 4px;
+      box-shadow: 2px 2px 3px #888888;
+      transition: background-color 0.3s;
+    }
+
+    .like:hover {
+      background-color: #005fa1;
+    }
+
+    .thumb-up {
+      margin-right: 5px;
+    }
+
+    .thumb-down {
+      margin-right: 5px;
+    }
+  </style>
+{% endblock content %}
+
+
+{% block domready %}
+  const url = '{% url "learning_logs:like" %}';
+  var options = {
+    method: 'POST',
+    headers: {'X-CSRFToken': csrftoken},
+    mode: 'same-origin'
+  }
+
+document.querySelectorAll('a.like').forEach(function(likeButton) {
+    likeButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        var formData = new FormData();
+        formData.append('id', likeButton.dataset.id);
+        formData.append('action', likeButton.dataset.action);
+        options['body'] = formData;
+
+        fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                if (data['status'] === 'ok') {
+                    var previousAction = likeButton.dataset.action;
+                    var action = previousAction === 'like' ? 'unlike' : 'like';
+                    likeButton.dataset.action = action;
+                    likeButton.innerHTML = action;
+
+                    var likeCount = likeButton.closest('.topic-info').querySelector('span.count .total');
+                    var totalLikes = parseInt(likeCount.innerHTML);
+                    likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1 : totalLikes - 1;
+                }
+            });
+    });
+});
+{% endblock %}

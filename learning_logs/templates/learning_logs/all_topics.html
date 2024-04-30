@@ -1,0 +1,61 @@
+{% extends "learning_logs/base.html" %}
+
+{% block header %}
+
+  {% if tag %}
+    <h2>Posts tagged with "{{ tag.name }}"</h2>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <p><a href="{% url 'learning_logs:new_topic' %}" class="btn btn-primary">Add discuss</a></p>
+<div id="topic-list">
+  {% include "learning_logs/list_topics.html" %}
+</div>
+
+  <style>
+.topic-item {
+  background: #f8f9fa;
+  padding: 10px;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  box-shadow: 3px 3px 6px 0 rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+  </style>
+{% endblock content %}
+
+{% block domready %}
+  var page = 1;
+  var emptyPage = false;
+  var blockRequest = false;
+
+  window.addEventListener('scroll', function(e) {
+  var margin = document.body.clientHeight - window.innerHeight - 200;
+  if (window.pageYOffset > margin && !emptyPage && !blockRequest) {
+    blockRequest = true;
+    page += 1;
+
+    fetch('?topics=1&page=' + page)
+      .then(response => response.text())
+      .then(html => {
+        if (html === '') {
+          emptyPage = true;
+        } else {
+          var topicsContainer = document.getElementById('topic-list');
+          var tempContainer = document.createElement('div');
+          tempContainer.innerHTML = html;
+          var topics = tempContainer.querySelectorAll('.topic-item');
+          topics.forEach(topic => {
+            topicsContainer.appendChild(topic);
+          });
+          blockRequest = false;
+        }
+      });
+  }
+});
+
+  // Launch scroll event
+  const scrollEvent = new Event('scroll');
+  window.dispatchEvent(scrollEvent);
+{% endblock %}

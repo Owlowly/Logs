@@ -1,0 +1,44 @@
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+
+  <p><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a></p>
+    
+  <div class="card my-2" style="border: 1px solid #d1d1d1; border-radius: 0;">
+    <div class="card-body">
+      <p>Add new comment:</p>
+      <form action="{% url 'learning_logs:new_entry' topic.id %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit" class="btn btn-3d">add comment</button>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    .btn-3d {
+      background-color: #4c8efc;
+      border: 1px solid #2e64e8;
+      border-radius: 5px;
+      padding: 6px 12px;
+      color: #fff;
+      font-weight: bold;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-3d:hover {
+      background-color: #3b7ae4;
+      border-color: #1e4adb;
+    }
+
+    .btn-3d:active {
+      background-color: #3867d6;
+      border-color: #0b2f7b;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+  </style>
+    
+{% endblock content %}

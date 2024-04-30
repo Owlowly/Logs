@@ -1,0 +1,35 @@
+{% extends "learning_logs/base.html" %}
+{% load topic_tags %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+  {% if search %}
+    <h5>Posts containing "{{ search }}"</h5>
+    <h5>
+      {% with results.count as total_results %}
+        Found {{ total_results }} result{{ total_results|pluralize:"s" }}
+      {% endwith %}
+    </h5>
+
+    {% for topic in results %}
+      <h5>
+        <a href="{{ topic.get_absolute_url }}">
+          {{ topic.text }}
+        </a>
+      </h5>
+      {{ topic.body|truncatewords_html:12|safe }}
+    {% empty %}
+      <p>There are no results for your request.</p>
+    {% endfor %}
+    <p><a href="{% url 'learning_logs:topic_search' %}" class="btn btn-primary rounded-pill">Search again</a></p>
+
+  {% else %}
+    <h1>Search for posts</h1>
+    <form method="get">
+      {{ form.as_p }}
+      <input type="submit" value="Search">
+    </form>
+  {% endif %}
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "learning_logs/base.html" %}
+
+{% block header %}
+  <h1>Most Liked Topics</h1>
+{% endblock %}
+
+{% block content %}
+  <div id="topic-list">
+    {% for topic in most_liked_topics %}
+      <div class="topic-item">
+        <h5><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic.text }}</a></h5>
+        <p>By: <a href="{% url 'account:view_profile' topic.owner.username %}" class="text-primary">{{ topic.owner.username }}</a></p>
+        <p>Liked: {{ topic.total_likes }}</p>
+        <p>{{ topic.body|truncatewords:50 }}</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <style>
+    .topic-item {
+      background: #f8f9fa;
+      padding: 10px;
+      border: 1px solid #d1d1d1;
+      border-radius: 10px;
+      box-shadow: 3px 3px 6px 0 rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+    }
+  </style>
+{% endblock content %}

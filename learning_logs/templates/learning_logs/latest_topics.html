@@ -1,0 +1,8 @@
+
+<ul>
+    {% for topic in latest_topics %}
+    <li>
+        <a href="{{ topic.get_absolute_url }}">{{ topic.text }}</a>
+    </li>
+    {% endfor %}
+</ul>

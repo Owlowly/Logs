@@ -1,0 +1,220 @@
+{% extends "learning_logs/base.html" %}
+
+{% block page_header %}
+<style>
+  .card {
+    border: 2px solid #0078d4;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .section-icon {
+    margin-right: 8px;
+  }
+
+  .login-form input[type="submit"] {
+    background-color: #0078d4;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 25px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .login-form input[type="submit"]:hover {
+    background-color: #005fa1;
+    transform: scale(1.05);
+  }
+
+  .social {
+    margin-top: 20px;
+  }
+
+  .social .facebook,
+  .social .google {
+    background-color: #4da6ff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .social .facebook:hover,
+  .social .google:hover {
+    background-color: #0080ff;
+    transform: scale(1.05);
+  }
+
+  #skillsCollapse {
+    background-color: #F0FFF0;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  #skillsCollapse ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  #skillsCollapse ul li {
+    margin-bottom: 5px;
+  }
+  .card {
+    border: 2px solid #0078d4;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .card-body {
+    padding: 20px;
+    background-color: #F0FFF0;
+  }
+
+  .section-icon {
+    margin-right: 8px;
+  }
+
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofP+NM6L5tMyi6eTk9L6ZsF86dIHNDz0N" crossorigin="anonymous">
+
+{% if user.is_authenticated %}
+  <div class="jumbotron">
+    <h2 class="display-3">Welcome, {{ user.username }}!</h2>
+    <p class="lead">You are already logged in.</p>
+    <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:topics' %}" role="button">My content &raquo;</a>
+  </div>
+{% else %}
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <i class="fas fa-user-circle section-icon"></i>
+            <h6 class="card-title">Hello, my name is Denys Astanin.</h6>
+            <p class="card-text">I'm a self-taught Django developer, looking for a full time junior developer position.</p>
+            <p>  Based in Cleveland, OH</p>
+
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#skillsCollapse" aria-expanded="false" aria-controls="skillsCollapse">
+              Skills
+            </button>
+
+            <div class="collapse mt-3" id="skillsCollapse">
+              <ul>
+                <li>Django</li>
+                <li>Python</li>
+                <li>Django Rest Framework</li>
+                <li>HTML</li>
+                <li>Bootstrap</li>
+                <li>Docker</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+
+          <div class="col-md-6">
+              <i class="fas fa-user-plus section-icon"></i>
+              <a class="btn btn-primary mt-3 mb-3" href="{% url 'account:register' %}">Register</a>
+          </div>
+          <div class="col-md-6 text-right">
+              <i class="fab fa-facebook section-icon"></i>
+              <a class="btn btn-outline-primary mt-3 mb-3" href="{% url 'social:begin' 'facebook' %}">Facebook Sign In</a>
+
+              <i class="fab fa-google section-icon"></i>
+              <a class="btn btn-outline-danger mt-3 mb-3" href="{% url 'social:begin' 'google-oauth2' %}">Google Sign In</a>
+          </div>
+
+        <div class="col-md-8">
+          <div class="container-fluid pt-2">
+          <p>Thank you for visiting my first project!</p>
+            <i class="fas fa-cogs section-icon"></i>
+
+            <div class="dropdown">
+              <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+
+                <i class="fas fa-list-ul section-icon"></i> Features
+              </button>
+              <div class="dropdown-menu">
+                <span class="dropdown-item-text">
+                  - Account management<br>
+                  - Facebook and Google authentication<br>
+                  - Pagination<br>
+                  - Infinite scroll<br>
+                  - Sitemaps<br>
+                  - Python-Decouple<br>
+                  - Share posts via email<br>
+                  - Tagging<br>
+                  - Retrieve similar posts<br>
+                  - Search by weighted queries<br>
+                  - Like feature<br>
+                  - Most liked posts<br>
+                  - View count<br>
+                  - Most viewed posts<br>
+                  - Most commented posts<br>
+                  - Follow feature<br>
+                  - User-to-User messaging feature<br>
+                  - Activity stream<br>
+                  <hr>
+                  - Django Rest Framework features:
+                    <ul>
+                    - Explore all posts<br>
+                    - Access most liked posts<br>
+                    - Get individual post<br>
+                    - Follow user<br>
+                    - View personal profile<br>
+                    - View followed users with posts<br>
+                    - View specific user with posts<br>
+                    </ul>
+                  <hr>
+                  - AWS Integration:
+                    <ul>
+                      - AWS RDS for PostgreSQL for secure and scalable database infrastructure<br>
+                      - Amazon S3 for reliable storage of static files and user media<br>
+                      - Improved performance and scalability with AWS services<br>
+                      - Automated backup and recovery options for data protection<br>
+                      <hr>
+                    </ul>
+                </span>
+              </div>
+            </div>
+            <p>Please note: Facebook/Google auth in testing mode. For sign-in application takes username/name/email
+              fields for account creation.
+              The account can be deleted from the Profile page. More info:</p>
+              <p>
+                <a class="nav-link" href="{% url 'learning_logs:privacy_policy' %}">Privacy policy</a>
+              </p>
+            <p></p>
+            <hr>
+            <i class="fas fa-address-book section-icon"></i> My contacts:
+            <p>Phone number: 330-461-7716</p>
+            <a href="{% url 'learning_logs:contact' %}" class="btn btn-outline-success">Email Denys</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "learning_logs/base.html" %}
+
+{% block header %}
+  <h1>Liked Subjects</h1>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    {% for topic in liked_topics %}
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card topic-item">
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href="{% url 'learning_logs:topic' topic.id %}" class="text-decoration-none text-dark">{{ topic.text }}</a>
+              </h5>
+              <p class="card-text tags">
+                Tags:
+                {% for tag in topic.tags.all %}
+                  <a href="{% url 'learning_logs:topic_list_by_tag' tag.slug %}" class="text-decoration-none text-secondary">
+                    {{ tag.name }}
+                  </a>
+                  {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              </p>
+              <p class="card-text small-text">
+                Added by <a href="{% url 'account:view_profile' topic.owner.username %}" class="text-decoration-none text-primary">{{ topic.owner.username }}</a> on {{ topic.date_added.date }}
+              </p>
+              <strong>
+                <div class="topic-info">
+                  <span class="count">
+                    <span class="total">{{ topic.total_likes }}</span>
+                    {% if topic.total_likes == 1 %}
+                      <i class="fas fa-thumbs-up"></i> like
+                    {% else %}
+                      <i class="fas fa-thumbs-up"></i> likes
+                    {% endif %}
+                  </span>
+                </div>
+              </strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% include 'account/pagination.html' with page=liked_topics %}
+</style>
+{% endblock %}

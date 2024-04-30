@@ -1,0 +1,35 @@
+{% for topic in topics %}
+  <div class="topic-item">
+    <h5>
+      <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+    </h5>
+    <p class="tags">
+      Tags:
+      {% for tag in topic.tags.all %}
+        <a href="{% url 'learning_logs:topic_list_by_tag' tag.slug %}">
+          {{ tag.name }}
+        </a>
+        {% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+    <p>
+      <small>Added by <a href="{% url 'account:view_profile' topic.owner.username %}"
+          class="text-primary">{{ topic.owner.username }}</a> on {{ topic.date_added.date }}</small>
+      <strong>
+          <div class="topic-info">
+            <div>
+              <span class="count">
+                <span class="total">{{ topic.total_likes }}</span>
+                {% if total_likes == 1 %}
+                  <i class="fas fa-thumbs-up"></i> like
+                {% else %}
+                  <i class="fas fa-thumbs-up"></i> likes
+                {% endif %}
+              </span>
+            </div>
+          </div>
+
+      </strong>
+    </p>
+  </div>
+{% endfor %}

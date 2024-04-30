@@ -1,0 +1,9 @@
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+  <h5>Email Sent</h5>
+  <p>Topic: {{ topic.text }}</p>
+  <p>Body: {{ topic.body }}</p>
+  <p>Recipient: {{ form.cleaned_data.to }}</p>
+  <a href="{% url 'learning_logs:index' %}" class="btn btn-outline-success">main page</a>
+{% endblock %}

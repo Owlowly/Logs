@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #F0FFF0;
+        }
+
+        h3, h5 {
+            color: #0078d4;
+        }
+
+        code {
+            background-color: #e6e6e6;
+            padding: 2px 4px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+        }
+
+        .api-section {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'learning_logs:index' %}" class="btn btn-outline-primary float-right">Main Page</a>
+    <h3>API Documentation</h3>
+    <div class="api-section">
+        <h5>Access to All Topics</h5>
+        <p>To access all topics, make a GET request to the following endpoint: <code>/api/</code></p>
+    </div>
+    <div class="api-section">
+        <h5> Access to Most Liked Topics</h5>
+    <p>
+        To access the most liked topics, make a GET request to the following endpoint: <code>/api/most_liked_topics/</code>
+    </p>
+    </div>
+    <div class="api-section">
+    <h5> Access to Each Topic Individually</h5>
+    <p>
+        To access a specific topic, replace {topic_id} with the topic's ID in the following endpoint: <code>/api/{topic_id}/</code>
+    </p>
+    </div>
+    <div class="api-section">
+    <h5> Follow User (For Authenticated Users)</h5>
+    <p>
+        Note: Authentication is required for this endpoint.
+    </p>
+    <p>
+        To follow a user, make a <strong>POST</strong> request to the following endpoint: <code>/api/follow/{user_id}/</code>
+    </p>
+    </div>
+    <div class="api-section">
+    <h5> My profile(For Authenticated Users)</h5>
+    <p>
+        Note: Authentication is required for this endpoint.
+    </p>
+    <p>
+        To access personal profile, make a POST request to the following endpoint: <code>/api/my_profile/</code>
+    </p>
+    </div>
+    <div class="api-section">
+    <h5> Followed profiles(For Authenticated Users)</h5>
+    <p>
+        To acces user profile, make a POST request to the following endpoint: <code>/api/followed_profiles/</code>
+    </p>
+    </div>
+    <div class="api-section">
+    <h5> User profile</h5>
+    <p>
+        To acces user profile, make a POST request to the following endpoint:
+        <code>/api/user_profile/{user_id}/</code>
+    </p>
+    </div>
+</body>
+</html>
