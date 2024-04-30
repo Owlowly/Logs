@@ -1,0 +1,45 @@
+{% extends 'learning_logs/base.html' %}
+<p>
+  Check new activity:
+</p>
+{% with user=action.user profile=action.profile_user %}
+<div class="action">
+  <div class="images">
+    {% if profile.photo %}
+      <a href="{% url 'account:view_profile' user.id %}">
+        <img src="{{ profile.photo.url }}" alt="{{ user.username }}" class="item-img">
+      </a>
+    {% endif %}
+    {% if action.target %}
+      {% with target=action.target %}
+        {% if target.image %}
+          <a href="{% url 'learning_logs:topic' target.id %}">
+            <img src="{{ target.image.url }}" class="item-img">
+          </a>
+        {% endif %}
+      {% endwith %}
+    {% endif %}
+  </div>
+  <div class="info">
+    <p>
+      <span class="date">{{ action.created|timesince }} ago</span>
+      <br />
+      <a href="{% url 'account:view_profile' user.id %}">
+        {{ user.first_name }}
+      </a>
+      {{ action.verb }}
+      {% if action.target %}
+        {% with target=action.target %}
+          {% if action.verb == 'follow' %}
+            <a href="{% url 'account:view_profile' target.id %}">{{ target.username }}</a>
+          {% elif action.verb == 'liked' %}
+            <a href="{% url 'learning_logs:topic' target.id %}">{{ target.text }}</a>
+          {% elif action.verb == 'new_topic' %}
+            <a href="{% url 'learning_logs:topic' target.id %}">{{ target.text }}</a>
+          {% endif %}
+        {% endwith %}
+      {% endif %}
+    </p>
+  </div>
+</div>
+{% endwith %}
