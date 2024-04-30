@@ -1,0 +1,27 @@
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+  <div class="container">
+    <h2 class="mt-5">Most Followed Users</h2>
+    <div class="row">
+      {% for profile in most_followed_users %}
+        <div class="col-md-3">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              {% if profile.photo %}
+                <img src="{{ profile.photo.url }}" alt="{{ profile.user.username }}" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px;">
+              {% else %}
+                <img src="https://via.placeholder.com/150" alt="{{ profile.user.username }}" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px;">
+              {% endif %}
+              <h5 class="card-title">{{ profile.user.username }}</h5>
+             <p>Followers: {{ profile.total_followers }}</p>
+
+              <a href="{% url 'account:view_profile' profile.user.username %}" class="btn btn-primary">View Profile</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+<!--  {% include 'account/pagination.html' with page=most_followed_users %} -->
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'learning_logs/base.html' %}
+
+{% block content %}
+  <h1>All Messages</h1>
+  <ul class="list-group">
+    {% for message in messages %}
+      <li class="list-group-item rounded-pill {% if not message.read %}bg-info text-dark{% endif %}">
+        <div class="d-flex justify-content-between align-items-center">
+          <a href="{% url 'account:user_messages' username=message.sender.username %}" class="{% if not message.read %}text-warning{% endif %}">
+            {{ message.sender.username }}
+          </a>
+          <span class="badge {% if not message.read %}bg-info text-dark{% else %}bg-light text-dark{% endif %}">{{ message.timestamp }}</span>
+        </div>
+        <p class="mb-0">{{ message.content|truncatewords:10 }}</p>
+        <a href="{% url 'account:send_messages' username=message.sender.username %}" class="btn btn-sm btn-primary rounded-pill mt-2">Send</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

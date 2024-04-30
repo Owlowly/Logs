@@ -1,0 +1,131 @@
+{% extends "learning_logs/base.html" %}
+{% load topic_tags %}
+
+
+{% block content %}
+<div class="container" xmlns="http://www.w3.org/1999/html">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+       <!-- <h2 class="mt-5">User: {{ profile_user.username }}</h2> -->
+
+        <div class="profile-picture mb-3">
+          {#<label>Profile Picture:</label>#}
+          {% if profile_user.profile.photo %}
+            <img src="{{ profile_user.profile.photo.url }}" alt="Profile Picture" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px;">
+          {% else %}
+            <p>No profile picture available.</p>
+          {% endif %}
+        </div>
+
+        <div class="profile-info mb-3">
+          <div class="form-group">
+            <label class="text-primary">Username:</label>
+            <h5>{{ profile_user.username }}</h5>
+          </div>
+        </div>
+        <p>
+        <div class="send-message-link">
+            {% if user.is_authenticated and user != profile_user %}
+                <a href="{% url 'account:send_messages' username=profile_user.username %}" class="button btn btn-primary">
+                    Send Message
+                </a>
+            {% endif %}
+        </div>
+    </p>
+
+    <strong>
+      {% if user.is_authenticated %}
+            {% if request.user != profile_user %}
+                <a href="#" data-id="{{ profile_user.id }}" data-action="{% if request.user in profile_user.profile.user_follow.all %}un{% endif %}follow" class="follow button btn btn-primary">
+                    {% if request.user not in profile_user.profile.user_follow.all %}
+                        Follow
+                    {% else %}
+                        Unfollow
+                    {% endif %}
+                </a>
+            {% endif %}
+        {% endif %}
+        <span class="count">
+            <span class="total" id="follower-count">{{ profile_user.profile.total_followers }}</span>
+            follower{{ profile_user.profile.user_follow.count|pluralize }}
+        </span>
+       <p>
+    <span class="count">
+        <span class="total" id="topic-count">{{ profile_user|user_topic_count }}</span>
+        total post{{ profile_user|user_topic_count|pluralize }}
+    </span>
+    </strong>
+<div class="topics">
+    <h3>Discuss:</h3>
+    {% if topics %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for topic in topics %}
+                    <tr>
+                        <td><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic.text }}</a></td>
+                        <td>
+                            <div class="new-entry">
+                                <a href="{% url 'learning_logs:new_entry' topic.id %}" class="btn btn-success">Add New Comment</a>
+
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>Empty Page, just yet.</p>
+    {% endif %}
+</div>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block domready %}
+  const url = '{% url "account:user_follow" %}';
+  var options = {
+    method: 'POST',
+    headers: {'X-CSRFToken': csrftoken},
+    mode: 'same-origin'
+  }
+
+  document.querySelector('a.follow')
+    .addEventListener('click', function(e){
+      e.preventDefault();
+      var followButton = this;
+
+      // add request body
+      var formData = new FormData();
+      formData.append('id', followButton.dataset.id);
+      formData.append('action', followButton.dataset.action);
+      options['body'] = formData;
+
+      // send HTTP request
+      fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+          if (data['status'] === 'ok')
+          {
+            var previousAction = followButton.dataset.action;
+
+            // toggle button text and data-action
+            var action = previousAction === 'follow' ? 'unfollow' : 'follow';
+            followButton.dataset.action = action;
+            followButton.innerHTML = action;
+
+            // update follower count
+            var followerCount = document.getElementById('follower-count');
+            var totalFollowers = parseInt(followerCount.innerHTML);
+            followerCount.innerHTML = previousAction === 'follow' ? totalFollowers + 1 : totalFollowers - 1;
+          }
+        })
+    });
+{% endblock %}

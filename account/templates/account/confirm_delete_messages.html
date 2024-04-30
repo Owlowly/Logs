@@ -1,0 +1,25 @@
+{% extends 'learning_logs/base.html' %}
+
+{% block content %}
+  <h1>Confirm Message Deletion</h1>
+  <p>Are you sure you want to delete the chat with '{{ profile_user.username }}'?</p>
+
+  <form method="post" action="{% url 'account:confirm_delete_messages' username=profile_user.username %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-danger">Delete</button>
+   <a href="{% url 'account:all_messages' %}" class="btn btn-outline-primary">Cancel</a>
+  </form>
+
+<ul>
+  {% for message in messages %}
+        <div style="{% if message.sender == request.user %}background-color: #b3e5fc; color: #000;{% else %}background-color: #b2ebf2; color: #000;{% endif %}" class="rounded-pill p-3 mb-3">
+            {% if message.sender == request.user %}
+                <p class="mb-0"><strong>You:</strong> {{ message.content }}</p>
+            {% else %}
+                <p class="mb-0"><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+            {% endif %}
+            <small class="text-muted">Sent on: {{ message.timestamp }}</small>
+        </div>
+      {% endfor %}
+</ul>
+{% endblock %}

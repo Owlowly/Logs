@@ -1,0 +1,43 @@
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card mt-5">
+          <div class="card-body text-center">
+            <h2 class="card-title">Profile</h2>
+
+            <div class="form-group">
+              {% if profile.photo %}
+                <img src="{{ profile.photo.url }}" alt="Profile Picture"
+                     class="img-thumbnail rounded-circle" style="width: 150px; height: 150px;">
+              {% else %}
+                <p class="text-muted">No profile picture available.</p>
+              {% endif %}
+            </div>
+
+            <div class="form-group">
+              <label class="font-weight-bold">Username:</label>
+              <p>{{ request.user.username }}</p>
+            </div>
+
+            <div class="form-group">
+              <label class="font-weight-bold">Email:</label>
+              <p>{{ request.user.email }}</p>
+            </div>
+
+            <div class="form-group">
+              <label class="font-weight-bold">Total followers:</label>
+              <p>{{ profile.total_followers }}</p>
+            </div>
+
+            <a href="{% url 'account:profile_edit' %}" class="btn btn-primary">Edit Profile</a>
+            <p></p>
+            <a href="{% url 'account:confirm_delete_user' user_id=request.user.id %}" class="btn btn-danger btn-sm rounded">Delete Account</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

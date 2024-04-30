@@ -1,0 +1,134 @@
+{% extends "learning_logs/base.html" %}
+
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+<style>
+  .container {
+    display: flex;
+    justify-content: flex-left;
+    align-items: center;
+    height: 90vh;
+  }
+
+  .registration-container {
+    background: linear-gradient(45deg, #1e5799, #207cca, #2989d8, #207cca, #1e5799);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    width: 400px;
+    text-align: center;
+    color: white;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  input[type="submit"] {
+    background-color: #4caf50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #45a049;
+  }
+
+  .social-buttons {
+    margin-top: 20px;
+  }
+
+  .social-buttons a {
+    margin-right: 10px;
+    text-decoration: none;
+  }
+
+  .social-buttons .btn {
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .social-buttons .btn-facebook {
+    background-color: rgba(0, 128, 255, 0.2);
+    color: #fff;
+    border: 2px solid #4da6ff;
+  }
+
+  .social-buttons .btn-facebook:hover {
+    background-color: rgba(0, 128, 255, 0.4);
+    transform: scale(1.1);
+  }
+
+  .social-buttons .btn-google {
+    background-color: rgba(255, 51, 0, 0.2);
+    color: #fff;
+    border: 2px solid #ff4d4d;
+  }
+
+  .social-buttons .btn-google:hover {
+    background-color: rgba(255, 51, 0, 0.4);
+    transform: scale(1.1);
+  }
+</style>
+
+<div class="social-buttons text-right">
+  <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-facebook">Sign in with Facebook</a>
+  <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-google">Sign in with Google</a>
+</div>
+
+<div class="container">
+  <div class="registration-container">
+    <h1>Create an account</h1>
+    <p>Please, sign up using the following form:</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <div>
+        <label for="{{ user_form.username.id_for_label }}">Username:</label>
+        {{ user_form.username }}
+      </div>
+
+      <div>
+        <label for="{{ user_form.email.id_for_label }}">Email address:</label>
+        {{ user_form.email }}
+      </div>
+
+      <div>
+        <label for="{{ user_form.password.id_for_label }}">Password:</label>
+        {{ user_form.password }}
+      </div>
+
+      <div>
+        <label for="{{ user_form.password2.id_for_label }}">Repeat password:</label>
+        {{ user_form.password2 }}
+      </div>
+
+      <div>
+        <input type="submit" class="btn btn-success" value="Create my account">
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

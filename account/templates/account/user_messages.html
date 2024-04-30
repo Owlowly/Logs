@@ -1,0 +1,50 @@
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <h2>Messages with {{ profile_user.username }}</h2>
+        {% for message in messages %}
+          <div style="{% if message.sender == request.user %}background-color: #b3e5fc; color: #000;{% else %}background-color: #b2ebf2; color: #000;{% endif %}" class="rounded-pill p-3 mb-3">
+              {% if message.sender == request.user %}
+                  <p class="mb-0"><strong>You:</strong> {{ message.content }}</p>
+              {% else %}
+                  <p class="mb-0"><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+              {% endif %}
+              <small class="text-muted">Sent on: {{ message.timestamp }}</small>
+          </div>
+        {% endfor %}
+
+      </div>
+      <div class="col-md-4">
+        <div class="list-group fixed-send-form rounded-pill p-3 mb-3" style="background-color: #e0f7fa;">
+          <h6>Send a Message</h6>
+          <form method="post" action="{% url 'account:send_messages' username=profile_user.username %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-sm btn-primary rounded-pill mt-2">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <a href="{% url 'account:confirm_delete_messages' username=profile_user.username %}" class="btn btn-outline-danger fixed-delete-button" style="position: fixed; top: 80px; right: 20px;">Delete Messages</a>
+  </div>
+
+  <style>
+    .rounded-pill {
+      border-radius: 20px;
+    }
+
+    .fixed-send-form {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .fixed-delete-button {
+      z-index: 1001;
+    }
+  </style>
+{% endblock %}
