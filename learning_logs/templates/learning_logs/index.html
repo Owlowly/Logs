@@ -106,32 +106,7 @@
   </div>
 {% else %}
   <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <i class="fas fa-user-circle section-icon"></i>
-            <h6 class="card-title">Hello, my name is Denys Astanin.</h6>
-            <p class="card-text">I'm a self-taught Django developer, looking for a full time junior developer position.</p>
-            <p>  Based in Cleveland, OH</p>
-
-            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#skillsCollapse" aria-expanded="false" aria-controls="skillsCollapse">
-              Skills
-            </button>
-
-            <div class="collapse mt-3" id="skillsCollapse">
-              <ul>
-                <li>Django</li>
-                <li>Python</li>
-                <li>Django Rest Framework</li>
-                <li>HTML</li>
-                <li>Bootstrap</li>
-                <li>Docker</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="row">      
       <div class="col-md-8">
         <div class="row">
 
@@ -148,10 +123,8 @@
           </div>
 
         <div class="col-md-8">
-          <div class="container-fluid pt-2">
-          <p>Thank you for visiting my first project!</p>
+          <div class="container-fluid pt-2">          
             <i class="fas fa-cogs section-icon"></i>
-
             <div class="dropdown">
               <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
 
@@ -205,12 +178,9 @@
               The account can be deleted from the Profile page. More info:</p>
               <p>
                 <a class="nav-link" href="{% url 'learning_logs:privacy_policy' %}">Privacy policy</a>
-              </p>
-            <p></p>
-            <hr>
-            <i class="fas fa-address-book section-icon"></i> My contacts:
-            <p>Phone number: 330-461-7716</p>
-            <a href="{% url 'learning_logs:contact' %}" class="btn btn-outline-success">Email Denys</a>
+              </p>        
+            
+            
           </div>
         </div>
       </div>
