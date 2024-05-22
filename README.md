@@ -4,8 +4,6 @@ Fetures:
 - Facebook and Google authentication
 - Pagination
 - Infinite scroll
-- Sitemaps
-- Python-Decouple
 - Share posts via email
 - Tagging
 - Retrieve similar posts
